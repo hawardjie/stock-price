@@ -47,33 +47,33 @@ A modern, feature-rich web application for real-time stock price watch with adva
 ### Installation
 
 1. Clone the repository:
-\`\`\`bash
+```bash
 git clone <repository-url>
 cd stock-price
-\`\`\`
+```
 
 2. Install dependencies:
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 3. Run the development server:
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Build for Production
 
-\`\`\`bash
+```bash
 npm run build
 npm start
-\`\`\`
+```
 
 ## Project Structure
 
-\`\`\`
+```
 stock-price/
 ├── app/                    # Next.js app router
 │   ├── layout.tsx         # Root layout with metadata
@@ -106,7 +106,7 @@ stock-price/
 │       └── cn.ts
 └── types/               # TypeScript definitions
     └── stock.ts
-\`\`\`
+```
 
 ## Features Deep Dive
 
@@ -162,13 +162,13 @@ Data is stored in browser's localStorage.
 
 The app uses Tailwind CSS with custom design tokens defined in \`globals.css\`. Modify CSS variables to change the theme:
 
-\`\`\`css
+```css
 :root {
   --primary: 221.2 83.2% 53.3%;
   --background: 0 0% 100%;
   /* ... more variables */
 }
-\`\`\`
+```
 
 ## Performance Optimization
 
