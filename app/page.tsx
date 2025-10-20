@@ -11,7 +11,6 @@ import VolumeChart from '@/components/charts/VolumeChart';
 import Watchlist from '@/components/stock/Watchlist';
 import TechnicalIndicators from '@/components/charts/TechnicalIndicators';
 import MarketHeatmap from '@/components/dashboard/MarketHeatmap';
-import NewsPanel from '@/components/dashboard/NewsPanel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { calculateTechnicalIndicators } from '@/lib/utils/calculations';
@@ -23,7 +22,6 @@ import {
   Bell,
   TrendingUp,
   BarChart3,
-  Newspaper,
   Activity,
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -34,7 +32,7 @@ export default function Home() {
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>('1M');
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'chart' | 'indicators' | 'news'>('chart');
+  const [activeTab, setActiveTab] = useState<'chart' | 'indicators'>('chart');
 
   useEffect(() => {
     // Set dark mode on initial load
@@ -188,17 +186,6 @@ export default function Home() {
                       <Activity className="w-4 h-4 inline mr-2" />
                       Indicators
                     </button>
-                    <button
-                      className={`px-4 py-2 font-medium transition-colors ${
-                        activeTab === 'news'
-                          ? 'text-blue-500 border-b-2 border-blue-500'
-                          : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
-                      }`}
-                      onClick={() => setActiveTab('news')}
-                    >
-                      <Newspaper className="w-4 h-4 inline mr-2" />
-                      News
-                    </button>
                   </div>
 
                   {/* Tab Content */}
@@ -221,8 +208,6 @@ export default function Home() {
                   {activeTab === 'indicators' && indicators && (
                     <TechnicalIndicators indicators={indicators} />
                   )}
-
-                  {activeTab === 'news' && <NewsPanel symbol={currentStock.symbol} />}
                 </>
               ) : (
                 <Card>
