@@ -108,7 +108,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-8 h-8 text-blue-500" />
-                <h1 className="text-2xl font-bold">Stock Tracker Pro</h1>
+                <h1 className="text-2xl font-bold">Stock Price Watch</h1>
               </div>
 
               <div className="flex-1 max-w-2xl">
@@ -228,7 +228,7 @@ export default function Home() {
                 <Card>
                   <CardContent className="p-12 text-center">
                     <TrendingUp className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                    <h2 className="text-2xl font-bold mb-2">Welcome to Stock Tracker Pro</h2>
+                    <h2 className="text-2xl font-bold mb-2">Welcome to </h2>
                     <p className="text-gray-500">Search for a stock to get started</p>
                   </CardContent>
                 </Card>

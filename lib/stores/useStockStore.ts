@@ -129,7 +129,7 @@ export const useStockStore = create<StockStore>()(
       comparisonSymbols: [],
       addComparisonSymbol: (symbol) =>
         set((state) => ({
-          comparisonSymbols: [...new Set([...state.comparisonSymbols, symbol])].slice(0, 5),
+          comparisonSymbols: Array.from(new Set([...state.comparisonSymbols, symbol])).slice(0, 5),
         })),
       removeComparisonSymbol: (symbol) =>
         set((state) => ({

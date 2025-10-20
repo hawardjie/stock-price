@@ -1,4 +1,4 @@
-# Quick Start Guide - Stock Tracker Pro
+# Quick Start Guide - Stock Price Watch
 
 ## Getting Started in 3 Steps
 

@@ -1,4 +1,4 @@
-# Stock Tracker Pro - Feature Documentation
+# Stock Price Watch - Feature Documentation
 
 ## Implemented Features
 

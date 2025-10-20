@@ -1,8 +1,8 @@
-# Stock Price Tracker Pro
+# Stock Price Watch
 
-A modern, feature-rich web application for real-time stock price tracking with advanced analytics, technical indicators, and customizable visualizations.
+A modern, feature-rich web application for real-time stock price watch with advanced analytics, technical indicators, and customizable visualizations.
 
-![Stock Tracker Pro](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
+![Stock Price Watch](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
 
 ## Features
 
