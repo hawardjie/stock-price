@@ -7,8 +7,6 @@ import {
   Palette,
   Bell,
   BarChart3,
-  Monitor,
-  Clock,
   RefreshCw,
   Save,
   Moon,
@@ -19,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useStockStore } from '@/lib/stores/useStockStore';
+import toast from 'react-hot-toast';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -26,7 +25,7 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const { theme, toggleTheme, chartSettings, updateChartSettings } = useStockStore();
+  const { theme, setTheme, toggleTheme, chartSettings, updateChartSettings, clearCache } = useStockStore();
   const [activeTab, setActiveTab] = useState<'appearance' | 'notifications' | 'chart' | 'data'>('appearance');
   const [localSettings, setLocalSettings] = useState(chartSettings);
   const [refreshInterval, setRefreshInterval] = useState('60');
@@ -41,6 +40,16 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const handleSave = () => {
     updateChartSettings(localSettings);
     onClose();
+  };
+
+  const handleClearCache = () => {
+    if (window.confirm('Are you sure you want to clear the cache? This will remove:\n\n• All notifications\n• Current session data\n• Comparison symbols\n\nYour watchlist, portfolio, and settings will NOT be affected.')) {
+      clearCache();
+      toast.success('Cache cleared successfully!', {
+        duration: 3000,
+        position: 'top-center',
+      });
+    }
   };
 
   if (!isOpen) return null;
@@ -141,7 +150,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     <label className="block text-sm font-medium mb-3">Theme</label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <button
-                        onClick={theme === 'light' ? undefined : toggleTheme}
+                        onClick={() => setTheme('light')}
                         className={`p-4 border-2 rounded-lg transition-all ${
                           theme === 'light'
                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
@@ -152,7 +161,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="text-sm font-medium">Light</div>
                       </button>
                       <button
-                        onClick={theme === 'dark' ? undefined : toggleTheme}
+                        onClick={() => setTheme('dark')}
                         className={`p-4 border-2 rounded-lg transition-all ${
                           theme === 'dark'
                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
@@ -163,12 +172,16 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="text-sm font-medium">Dark</div>
                       </button>
                       <button
-                        className="p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg opacity-50 cursor-not-allowed"
-                        disabled
+                        onClick={() => setTheme('auto')}
+                        className={`p-4 border-2 rounded-lg transition-all ${
+                          theme === 'auto'
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                        }`}
                       >
                         <Laptop className="w-6 h-6 mx-auto mb-2" />
                         <div className="text-sm font-medium">Auto</div>
-                        <Badge className="mt-1 text-xs">Soon</Badge>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Follows system</div>
                       </button>
                     </div>
                   </div>
@@ -414,32 +427,21 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     </select>
                   </div>
 
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg">
-                    <div className="flex items-start gap-3">
-                      <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                      <div>
-                        <div className="font-medium text-sm text-blue-900 dark:text-blue-100">
-                          Real-time Data
-                        </div>
-                        <div className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-                          Market data is delayed by 15 minutes. Upgrade to premium for real-time quotes.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <div>
                     <label className="block text-sm font-medium mb-3">Data Management</label>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start hover:bg-red-50 hover:border-red-300 dark:hover:bg-red-950/20 dark:hover:border-red-900"
+                        onClick={handleClearCache}
+                      >
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Clear Cache
                       </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <Monitor className="w-4 h-4 mr-2" />
-                        Export Watchlist
-                      </Button>
                     </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      Clears notifications and temporary session data. Your watchlist and settings will be preserved.
+                    </p>
                   </div>
                 </div>
               )}

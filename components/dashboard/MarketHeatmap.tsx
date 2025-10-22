@@ -42,22 +42,22 @@ export default function MarketHeatmap() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-4 gap-2 auto-rows-[100px]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 auto-rows-[100px]">
           {sectors.map((sector) => (
             <div
               key={sector.symbol}
               className={cn(
-                'rounded-lg p-4 flex flex-col justify-between transition-all hover:scale-105 cursor-pointer',
+                'rounded-lg p-3 flex flex-col justify-between transition-all hover:scale-105 cursor-pointer',
                 getColorClass(sector.change),
                 getSize(sector.marketCap)
               )}
             >
               <div>
-                <div className="font-bold text-sm">{sector.name}</div>
-                <div className="text-xs opacity-90">{sector.symbol}</div>
+                <div className="font-bold text-base leading-tight">{sector.name}</div>
+                <div className="text-xs opacity-80 mt-0.5">{sector.symbol}</div>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold">
+              <div className="text-right mt-auto">
+                <div className="text-lg font-bold leading-tight">
                   {sector.change >= 0 ? '+' : ''}
                   {sector.change.toFixed(2)}%
                 </div>
@@ -65,22 +65,22 @@ export default function MarketHeatmap() {
             </div>
           ))}
         </div>
-        <div className="mt-4 flex items-center justify-center gap-4 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-600 rounded" />
-            <span>Strong Gain</span>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 bg-green-600 rounded" />
+            <span className="whitespace-nowrap">Strong Gain</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-400 rounded" />
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 bg-green-400 rounded" />
             <span>Gain</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-400 rounded" />
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 bg-red-400 rounded" />
             <span>Loss</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-600 rounded" />
-            <span>Strong Loss</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 bg-red-600 rounded" />
+            <span className="whitespace-nowrap">Strong Loss</span>
           </div>
         </div>
       </CardContent>

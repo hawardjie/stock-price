@@ -48,7 +48,8 @@ interface StockStore {
   clearComparisonSymbols: () => void;
 
   // Theme
-  theme: 'light' | 'dark';
+  theme: 'light' | 'dark' | 'auto';
+  setTheme: (theme: 'light' | 'dark' | 'auto') => void;
   toggleTheme: () => void;
 
   // Notifications
@@ -58,6 +59,9 @@ interface StockStore {
   markAllNotificationsAsRead: () => void;
   deleteNotification: (id: string) => void;
   clearAllNotifications: () => void;
+
+  // Cache management
+  clearCache: () => void;
 }
 
 export const useStockStore = create<StockStore>()(
@@ -159,10 +163,17 @@ export const useStockStore = create<StockStore>()(
 
       // Theme
       theme: 'dark',
+      setTheme: (theme) => set({ theme }),
       toggleTheme: () =>
-        set((state) => ({
-          theme: state.theme === 'light' ? 'dark' : 'light',
-        })),
+        set((state) => {
+          // If auto, toggle between light and dark (not back to auto)
+          if (state.theme === 'auto') {
+            // Check system preference and toggle to opposite
+            const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            return { theme: prefersDark ? 'light' : 'dark' };
+          }
+          return { theme: state.theme === 'light' ? 'dark' : 'light' };
+        }),
 
       // Notifications
       notifications: [],
@@ -221,6 +232,15 @@ export const useStockStore = create<StockStore>()(
           notifications: state.notifications.filter((n) => n.id !== id),
         })),
       clearAllNotifications: () => set({ notifications: [] }),
+
+      // Cache management - clears temporary session data
+      clearCache: () =>
+        set({
+          notifications: [],
+          selectedSymbol: null,
+          selectedStock: null,
+          comparisonSymbols: [],
+        }),
     }),
     {
       name: 'stock-tracker-storage',

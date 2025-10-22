@@ -107,7 +107,6 @@ export async function GET(request: NextRequest) {
 
     // If Finnhub returns empty results, fallback to Alpha Vantage
     if (!finnhubData || finnhubData.length === 0) {
-      console.log('Finnhub returned no news, using Alpha Vantage as fallback');
       const alphaVantageNews = await fetchAlphaVantageNews(symbol || undefined);
       return NextResponse.json(alphaVantageNews);
     }

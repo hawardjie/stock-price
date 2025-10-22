@@ -195,15 +195,15 @@ export default function StockChart({ data, symbol, onTimeFrameChange }: StockCha
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-        <div className="flex gap-1">
+      <div className="mb-4">
+        <div className="flex flex-wrap gap-2">
           {timeFrames.map((tf) => (
             <Button
               key={tf}
               size="sm"
               variant={selectedTimeFrame === tf ? 'default' : 'outline'}
               onClick={() => handleTimeFrameChange(tf)}
-              className="min-w-[50px]"
+              className="flex-1 min-w-[60px] sm:flex-none sm:min-w-[50px]"
             >
               {tf}
             </Button>

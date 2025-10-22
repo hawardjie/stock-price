@@ -28,6 +28,7 @@ import {
   TrendingUp,
   BarChart3,
   Activity,
+  Laptop,
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -54,8 +55,29 @@ export default function Home() {
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const notificationButtonRefMobile = useRef<HTMLButtonElement>(null);
   const [fetchingNews, setFetchingNews] = useState(false);
+  const [appliedTheme, setAppliedTheme] = useState<'light' | 'dark'>('dark');
 
   const notificationCount = notifications.filter(n => !n.read).length;
+
+  // Handle auto theme based on system preference
+  useEffect(() => {
+    if (theme === 'auto') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+        setAppliedTheme(e.matches ? 'dark' : 'light');
+      };
+
+      // Set initial theme
+      updateTheme(mediaQuery);
+
+      // Listen for changes
+      mediaQuery.addEventListener('change', updateTheme);
+
+      return () => mediaQuery.removeEventListener('change', updateTheme);
+    } else {
+      setAppliedTheme(theme);
+    }
+  }, [theme]);
 
   // Fetch news and notifications
   const fetchNewsNotifications = async () => {
@@ -107,7 +129,7 @@ export default function Home() {
       ]);
       setCurrentStock(quote);
       setHistoricalData(historical);
-      toast.success(`Loaded ${symbol}`);
+      // Removed redundant success toast - UI already shows the loaded stock
     } catch (error) {
       toast.error('Error loading stock data');
       console.error(error);
@@ -151,7 +173,7 @@ export default function Home() {
   const indicators = historicalData.length > 0 ? calculateTechnicalIndicators(historicalData) : null;
 
   return (
-    <div className={theme}>
+    <div className={appliedTheme}>
       <Toaster position="top-right" />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
         {/* Header */}
@@ -159,18 +181,21 @@ export default function Home() {
           <div className="container mx-auto px-4 py-4 overflow-visible">
             {/* Desktop Layout - Single Row */}
             <div className="hidden lg:flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-8 h-8 text-blue-500" />
-                <h1 className="text-2xl font-bold">Stock Price Watch</h1>
-              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-8 h-8 text-blue-500" />
+                  <h1 className="text-2xl font-bold">Stock Price Watch</h1>
+                </div>
 
-              <div className="flex-1 max-w-2xl">
-                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
-              </div>
-
-              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                 <Button variant="outline" size="icon" onClick={toggleTheme}>
-                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  {theme === 'auto' ? (
+                    <Laptop className="w-5 h-5" />
+                  ) : theme === 'dark' ? (
+                    <Sun className="w-5 h-5" />
+                  ) : (
+                    <Moon className="w-5 h-5" />
+                  )}
                 </Button>
                 <div className="relative">
                   <Button
@@ -209,26 +234,32 @@ export default function Home() {
                 >
                   <Settings className="w-5 h-5" />
                 </Button>
+                </div>
+              </div>
+
+              <div className="flex-1 max-w-2xl">
+                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
               </div>
             </div>
 
             {/* Mobile Layout - Stacked */}
             <div className="lg:hidden space-y-4">
-              {/* Row 1: Logo */}
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-8 h-8 text-blue-500" />
-                <h1 className="text-2xl font-bold">Stock Price Watch</h1>
-              </div>
+              {/* Row 1: Logo + Icons */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-8 h-8 text-blue-500" />
+                  <h1 className="text-xl font-bold">Stock Price Watch</h1>
+                </div>
 
-              {/* Row 2: Search */}
-              <div className="w-full">
-                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
-              </div>
-
-              {/* Row 3: Menu Icons */}
-              <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+                <div className="flex items-center gap-2">
                 <Button variant="outline" size="icon" onClick={toggleTheme}>
-                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  {theme === 'auto' ? (
+                    <Laptop className="w-5 h-5" />
+                  ) : theme === 'dark' ? (
+                    <Sun className="w-5 h-5" />
+                  ) : (
+                    <Moon className="w-5 h-5" />
+                  )}
                 </Button>
                 <div className="relative">
                   <Button
@@ -267,6 +298,12 @@ export default function Home() {
                 >
                   <Settings className="w-5 h-5" />
                 </Button>
+                </div>
+              </div>
+
+              {/* Row 2: Search */}
+              <div className="w-full">
+                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
               </div>
             </div>
           </div>

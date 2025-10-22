@@ -24,16 +24,33 @@ class RealStockApiService {
         params: {
           symbol: symbol,
         },
+        timeout: 10000, // 10 second timeout
       });
+
+      // Check if we have valid data
+      if (!response.data || !response.data.chart || !response.data.chart.result || response.data.chart.result.length === 0) {
+        console.error('Invalid response structure:', response.data);
+        throw new Error(`Invalid data received for ${symbol}`);
+      }
 
       const result = response.data.chart.result[0];
       const meta = result.meta;
       const quote = result.indicators.quote[0];
 
+      // Validate we have the necessary data
+      if (!meta || !quote || !quote.close || quote.close.length === 0) {
+        throw new Error(`Incomplete data received for ${symbol}`);
+      }
+
       // Get the latest values
       const latestIndex = quote.close.length - 1;
       const currentPrice = meta.regularMarketPrice || quote.close[latestIndex];
       const previousClose = meta.previousClose || meta.chartPreviousClose;
+
+      if (typeof currentPrice !== 'number' || typeof previousClose !== 'number') {
+        throw new Error(`Invalid price data for ${symbol}`);
+      }
+
       const change = currentPrice - previousClose;
       const changePercent = (change / previousClose) * 100;
 
@@ -56,9 +73,31 @@ class RealStockApiService {
         dayLow: meta.regularMarketDayLow || Math.min(...quote.low.filter(Boolean)),
         timestamp: Date.now(),
       };
-    } catch (error) {
-      console.error('Error fetching real-time quote from Yahoo Finance:', error);
-      throw new Error(`Failed to fetch quote for ${symbol}`);
+    } catch (error: any) {
+      if (error.response) {
+        const status = error.response.status;
+        const errorData = error.response.data;
+
+        console.error(`API error (${status}) fetching quote for ${symbol}:`, errorData);
+
+        if (status === 404) {
+          throw new Error(`Symbol "${symbol}" not found. Please check the symbol and try again.`);
+        } else if (status === 503) {
+          throw new Error(`Yahoo Finance service is currently unavailable. Please try again later.`);
+        } else if (errorData?.error) {
+          throw new Error(errorData.error);
+        } else {
+          throw new Error(`Failed to fetch quote for ${symbol}. API returned status ${status}.`);
+        }
+      } else if (error.request) {
+        console.error('No response received from API:', error.request);
+        throw new Error(`Unable to reach stock data service. Please check your internet connection.`);
+      } else if (error.message) {
+        throw error;
+      } else {
+        console.error('Unknown error fetching quote:', error);
+        throw new Error(`Failed to fetch quote for ${symbol}. Please try again.`);
+      }
     }
   }
 
@@ -76,11 +115,23 @@ class RealStockApiService {
           interval,
           range,
         },
+        timeout: 15000, // 15 second timeout
       });
+
+      // Validate response structure
+      if (!response.data || !response.data.chart || !response.data.chart.result || response.data.chart.result.length === 0) {
+        console.error('Invalid response structure:', response.data);
+        throw new Error(`Invalid historical data received for ${symbol}`);
+      }
 
       const result = response.data.chart.result[0];
       const timestamps = result.timestamp;
       const quote = result.indicators.quote[0];
+
+      // Validate data
+      if (!timestamps || !quote || timestamps.length === 0) {
+        throw new Error(`No historical data available for ${symbol}`);
+      }
 
       return timestamps.map((timestamp: number, index: number) => ({
         date: new Date(timestamp * 1000).toISOString().split('T')[0],
@@ -91,9 +142,31 @@ class RealStockApiService {
         close: quote.close[index] || 0,
         volume: quote.volume[index] || 0,
       }));
-    } catch (error) {
-      console.error('Error fetching historical data from Yahoo Finance:', error);
-      throw new Error(`Failed to fetch historical data for ${symbol}`);
+    } catch (error: any) {
+      if (error.response) {
+        const status = error.response.status;
+        const errorData = error.response.data;
+
+        console.error(`API error (${status}) fetching historical data for ${symbol}:`, errorData);
+
+        if (status === 404) {
+          throw new Error(`Symbol "${symbol}" not found.`);
+        } else if (status === 503) {
+          throw new Error(`Yahoo Finance service is currently unavailable.`);
+        } else if (errorData?.error) {
+          throw new Error(errorData.error);
+        } else {
+          throw new Error(`Failed to fetch historical data for ${symbol}.`);
+        }
+      } else if (error.request) {
+        console.error('No response received from API:', error.request);
+        throw new Error(`Unable to reach stock data service.`);
+      } else if (error.message) {
+        throw error;
+      } else {
+        console.error('Unknown error fetching historical data:', error);
+        throw new Error(`Failed to fetch historical data for ${symbol}.`);
+      }
     }
   }
 
@@ -122,15 +195,28 @@ class RealStockApiService {
         params: {
           q: query,
         },
+        timeout: 10000, // 10 second timeout
       });
+
+      // Validate response structure
+      if (!response.data || !response.data.quoteResponse) {
+        console.error('Invalid search response:', response.data);
+        return [];
+      }
 
       const quotes = response.data.quoteResponse.result || [];
       return quotes.map((quote: any) => ({
         symbol: quote.symbol,
         name: quote.longName || quote.shortName || quote.symbol,
       }));
-    } catch (error) {
-      console.error('Error searching stocks:', error);
+    } catch (error: any) {
+      if (error.response) {
+        console.error(`Search API error (${error.response.status}):`, error.response.data);
+      } else if (error.request) {
+        console.error('No response received from search API');
+      } else {
+        console.error('Error searching stocks:', error);
+      }
       return [];
     }
   }
@@ -140,7 +226,15 @@ class RealStockApiService {
    */
   async getTrendingStocks(): Promise<Array<{ symbol: string; name: string; change: number }>> {
     try {
-      const response = await axios.get('/api/stock/trending');
+      const response = await axios.get('/api/stock/trending', {
+        timeout: 10000, // 10 second timeout
+      });
+
+      // Validate response structure
+      if (!response.data || !response.data.finance || !response.data.finance.result) {
+        console.error('Invalid trending stocks response:', response.data);
+        throw new Error('Invalid response structure');
+      }
 
       const quotes = response.data.finance.result[0].quotes || [];
 
