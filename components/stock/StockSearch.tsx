@@ -9,9 +9,10 @@ import { cn } from '@/lib/utils/cn';
 
 interface StockSearchProps {
   onSelectStock: (symbol: string, name: string) => void;
+  showTrending?: boolean;
 }
 
-export default function StockSearch({ onSelectStock }: StockSearchProps) {
+export default function StockSearch({ onSelectStock, showTrending = true }: StockSearchProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Array<{ symbol: string; name: string }>>([]);
   const [trending, setTrending] = useState<Array<{ symbol: string; name: string; change: number }>>([]);
@@ -78,7 +79,7 @@ export default function StockSearch({ onSelectStock }: StockSearchProps) {
         </Card>
       )}
 
-      {!showResults && trending.length > 0 && (
+      {showTrending && !showResults && trending.length > 0 && (
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-4 h-4 text-blue-500" />

@@ -1,18 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useStockStore } from '@/lib/stores/useStockStore';
 import { stockApi } from '@/lib/services/stockApi';
 import { StockQuote, StockHistoricalData, TimeFrame } from '@/types/stock';
 import StockSearch from '@/components/stock/StockSearch';
+import TrendingStocks from '@/components/stock/TrendingStocks';
 import StockInfo from '@/components/stock/StockInfo';
 import StockChart from '@/components/charts/StockChart';
 import VolumeChart from '@/components/charts/VolumeChart';
 import Watchlist from '@/components/stock/Watchlist';
 import TechnicalIndicators from '@/components/charts/TechnicalIndicators';
 import MarketHeatmap from '@/components/dashboard/MarketHeatmap';
+import NotificationsDropdown from '@/components/notifications/NotificationsDropdown';
+import SettingsModal from '@/components/settings/SettingsModal';
+import { newsNotificationService } from '@/lib/services/newsNotificationService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { calculateTechnicalIndicators } from '@/lib/utils/calculations';
 import {
   Moon,
@@ -27,12 +32,49 @@ import {
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
-  const { theme, toggleTheme, addToWatchlist, watchlist } = useStockStore();
+  const {
+    theme,
+    toggleTheme,
+    addToWatchlist,
+    watchlist,
+    notifications,
+    addNotification,
+    markNotificationAsRead,
+    markAllNotificationsAsRead,
+    deleteNotification,
+    clearAllNotifications,
+  } = useStockStore();
   const [currentStock, setCurrentStock] = useState<StockQuote | null>(null);
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>('1M');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'chart' | 'indicators'>('chart');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const notificationButtonRef = useRef<HTMLButtonElement>(null);
+  const notificationButtonRefMobile = useRef<HTMLButtonElement>(null);
+  const [fetchingNews, setFetchingNews] = useState(false);
+
+  const notificationCount = notifications.filter(n => !n.read).length;
+
+  // Fetch news and notifications
+  const fetchNewsNotifications = async () => {
+    if (fetchingNews) return;
+
+    setFetchingNews(true);
+    try {
+      const newNotifications = await newsNotificationService.fetchAllNotifications(watchlist);
+
+      // Add each notification to the store (duplicates are handled by the store)
+      newNotifications.forEach((notification) => {
+        addNotification(notification);
+      });
+    } catch (error) {
+      console.error('Error fetching news notifications:', error);
+    } finally {
+      setFetchingNews(false);
+    }
+  };
 
   useEffect(() => {
     // Set dark mode on initial load
@@ -42,7 +84,19 @@ export default function Home() {
   useEffect(() => {
     // Load default stock on mount
     loadStock('AAPL');
+
+    // Fetch latest news notifications immediately on load
+    fetchNewsNotifications();
   }, []);
+
+  // Periodic news refresh (every 5 minutes)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchNewsNotifications();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [watchlist]); // Re-setup interval when watchlist changes
 
   const loadStock = async (symbol: string) => {
     setLoading(true);
@@ -101,8 +155,8 @@ export default function Home() {
       <Toaster position="top-right" />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
         {/* Header */}
-        <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
-          <div className="container mx-auto px-4 py-4">
+        <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm overflow-visible">
+          <div className="container mx-auto px-4 py-4 overflow-visible">
             {/* Desktop Layout - Single Row */}
             <div className="hidden lg:flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
@@ -111,17 +165,48 @@ export default function Home() {
               </div>
 
               <div className="flex-1 max-w-2xl">
-                <StockSearch onSelectStock={handleSelectStock} />
+                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
               </div>
 
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="icon" onClick={toggleTheme}>
                   {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Bell className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" size="icon">
+                <div className="relative">
+                  <Button
+                    ref={notificationButtonRef}
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setShowNotifications(!showNotifications)}
+                  >
+                    <Bell className="w-5 h-5" />
+                  </Button>
+                  {notificationCount > 0 && (
+                    <Badge
+                      variant="default"
+                      className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center p-0 text-xs font-bold bg-yellow-400 hover:bg-yellow-500 text-gray-900 border-2 border-white dark:border-gray-900 shadow-lg"
+                    >
+                      {notificationCount}
+                    </Badge>
+                  )}
+                  <NotificationsDropdown
+                    isOpen={showNotifications}
+                    onClose={() => setShowNotifications(false)}
+                    buttonRef={notificationButtonRef}
+                    notifications={notifications}
+                    onMarkAsRead={markNotificationAsRead}
+                    onMarkAllAsRead={markAllNotificationsAsRead}
+                    onDelete={deleteNotification}
+                    onClearAll={clearAllNotifications}
+                    onRefresh={fetchNewsNotifications}
+                    isRefreshing={fetchingNews}
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowSettings(true)}
+                >
                   <Settings className="w-5 h-5" />
                 </Button>
               </div>
@@ -135,9 +220,9 @@ export default function Home() {
                 <h1 className="text-2xl font-bold">Stock Price Watch</h1>
               </div>
 
-              {/* Row 2: Search & Trending Stocks */}
+              {/* Row 2: Search */}
               <div className="w-full">
-                <StockSearch onSelectStock={handleSelectStock} />
+                <StockSearch onSelectStock={handleSelectStock} showTrending={false} />
               </div>
 
               {/* Row 3: Menu Icons */}
@@ -145,16 +230,50 @@ export default function Home() {
                 <Button variant="outline" size="icon" onClick={toggleTheme}>
                   {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Bell className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" size="icon">
+                <div className="relative">
+                  <Button
+                    ref={notificationButtonRefMobile}
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setShowNotifications(!showNotifications)}
+                  >
+                    <Bell className="w-5 h-5" />
+                  </Button>
+                  {notificationCount > 0 && (
+                    <Badge
+                      variant="default"
+                      className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center p-0 text-xs font-bold bg-yellow-400 hover:bg-yellow-500 text-gray-900 border-2 border-white dark:border-gray-900 shadow-lg"
+                    >
+                      {notificationCount}
+                    </Badge>
+                  )}
+                  <NotificationsDropdown
+                    isOpen={showNotifications}
+                    onClose={() => setShowNotifications(false)}
+                    buttonRef={notificationButtonRefMobile}
+                    notifications={notifications}
+                    onMarkAsRead={markNotificationAsRead}
+                    onMarkAllAsRead={markAllNotificationsAsRead}
+                    onDelete={deleteNotification}
+                    onClearAll={clearAllNotifications}
+                    onRefresh={fetchNewsNotifications}
+                    isRefreshing={fetchingNews}
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowSettings(true)}
+                >
                   <Settings className="w-5 h-5" />
                 </Button>
               </div>
             </div>
           </div>
         </header>
+
+        {/* Trending Stocks - Not Sticky */}
+        <TrendingStocks onSelectStock={handleSelectStock} />
 
         {/* Main Content */}
         <main className="container mx-auto px-4 py-6">
@@ -234,7 +353,7 @@ export default function Home() {
                   )}
 
                   {activeTab === 'indicators' && indicators && (
-                    <TechnicalIndicators indicators={indicators} />
+                    <TechnicalIndicators indicators={indicators} historicalData={historicalData} />
                   )}
                 </>
               ) : (
@@ -250,7 +369,7 @@ export default function Home() {
 
             {/* Right Sidebar */}
             <div className="lg:col-span-3 space-y-6">
-              {indicators && <TechnicalIndicators indicators={indicators} />}
+              {indicators && <TechnicalIndicators indicators={indicators} historicalData={historicalData} compact={true} />}
             </div>
           </div>
 
@@ -259,6 +378,9 @@ export default function Home() {
             <MarketHeatmap />
           </div>
         </main>
+
+        {/* Settings Modal */}
+        <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
       </div>
     </div>
   );

@@ -2,6 +2,18 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { StockQuote, WatchlistItem, Alert, ChartSettings, PortfolioHolding } from '@/types/stock';
 
+export interface Notification {
+  id: string;
+  type: 'price_alert' | 'news' | 'system' | 'watchlist';
+  title: string;
+  message: string;
+  timestamp: number;
+  read: boolean;
+  symbol?: string;
+  url?: string;
+  source?: string;
+}
+
 interface StockStore {
   // Current selected stock
   selectedSymbol: string | null;
@@ -38,6 +50,14 @@ interface StockStore {
   // Theme
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+
+  // Notifications
+  notifications: Notification[];
+  addNotification: (notification: Omit<Notification, 'id'>) => void;
+  markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
+  deleteNotification: (id: string) => void;
+  clearAllNotifications: () => void;
 }
 
 export const useStockStore = create<StockStore>()(
@@ -143,6 +163,64 @@ export const useStockStore = create<StockStore>()(
         set((state) => ({
           theme: state.theme === 'light' ? 'dark' : 'light',
         })),
+
+      // Notifications
+      notifications: [],
+      addNotification: (notification) =>
+        set((state) => {
+          // Enhanced deduplication logic
+          const exists = state.notifications.some((n) => {
+            // For news notifications, check if same headline within last 24 hours
+            if (notification.type === 'news' && n.type === 'news') {
+              const timeDiff = Date.now() - n.timestamp;
+              const sameHeadline = n.title === notification.title;
+              return sameHeadline && timeDiff < 24 * 60 * 60 * 1000;
+            }
+
+            // For price/volume alerts, check if same symbol and type within last hour
+            if ((notification.type === 'price_alert' || notification.type === 'watchlist') &&
+                (n.type === 'price_alert' || n.type === 'watchlist')) {
+              const timeDiff = Date.now() - n.timestamp;
+              const sameSymbol = n.symbol === notification.symbol;
+              const sameType = n.type === notification.type;
+              return sameSymbol && sameType && timeDiff < 60 * 60 * 1000; // 1 hour
+            }
+
+            // For system notifications, check exact match
+            if (notification.type === 'system' && n.type === 'system') {
+              return n.title === notification.title;
+            }
+
+            return false;
+          });
+
+          if (exists) return state;
+
+          return {
+            notifications: [
+              {
+                ...notification,
+                id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              },
+              ...state.notifications,
+            ].slice(0, 50), // Keep only last 50 notifications
+          };
+        }),
+      markNotificationAsRead: (id) =>
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n
+          ),
+        })),
+      markAllNotificationsAsRead: () =>
+        set((state) => ({
+          notifications: state.notifications.map((n) => ({ ...n, read: true })),
+        })),
+      deleteNotification: (id) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+        })),
+      clearAllNotifications: () => set({ notifications: [] }),
     }),
     {
       name: 'stock-tracker-storage',
@@ -152,6 +230,7 @@ export const useStockStore = create<StockStore>()(
         alerts: state.alerts,
         chartSettings: state.chartSettings,
         theme: state.theme,
+        notifications: state.notifications,
       }),
     }
   )
