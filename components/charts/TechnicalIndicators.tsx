@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Line, Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,7 +22,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 interface TechnicalIndicatorsProps {
   indicators: TechnicalIndicator;
-  historicalData?: Array<{ date: number }>;
+  historicalData?: Array<{ date: string; timestamp: number }>;
   compact?: boolean;
 }
 
@@ -115,11 +115,11 @@ export default function TechnicalIndicators({ indicators, historicalData, compac
   const labels = historicalData
     ? historicalData.map((d, i) => {
         if (i % Math.floor(historicalData.length / 10) === 0) {
-          return new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          return new Date(d.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
         return '';
       })
-    : indicators.rsi.map((_, i) => i);
+    : indicators.rsi.map((_, i) => i.toString());
 
   // RSI Chart Data
   const rsiChartData = {
@@ -316,7 +316,7 @@ export default function TechnicalIndicators({ indicators, historicalData, compac
             </div>
           </div>
           <div className="h-48">
-            <Line data={macdChartData} options={macdChartOptions} />
+            <Chart type="line" data={macdChartData} options={macdChartOptions} />
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded">
             <strong>Interpretation:</strong> MACD shows trend direction and momentum. When MACD crosses above signal line,
