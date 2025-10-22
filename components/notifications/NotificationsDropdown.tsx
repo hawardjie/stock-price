@@ -34,20 +34,89 @@ export default function NotificationsDropdown({
   isRefreshing = false,
 }: NotificationsDropdownProps) {
   const [mounted, setMounted] = useState(false);
-  const [position, setPosition] = useState({ top: 0, right: 0 });
+  const [position, setPosition] = useState<{ top: number; right?: number; left?: number }>({ top: 0, right: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    setIsMobile(window.innerWidth < 640); // sm breakpoint
+
+    // Handle window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+      if (isOpen && buttonRef?.current) {
+        // Recalculate position on resize
+        const rect = buttonRef.current.getBoundingClientRect();
+        const isMobileView = window.innerWidth < 640;
+        const dropdownWidth = 384;
+        const viewportWidth = window.innerWidth;
+        const spacing = 16;
+
+        if (isMobileView) {
+          setPosition({
+            top: rect.bottom + 8,
+            left: spacing,
+          });
+        } else {
+          const rightPosition = viewportWidth - rect.right;
+          const leftPosition = rect.right - dropdownWidth;
+
+          if (leftPosition < spacing) {
+            setPosition({
+              top: rect.bottom + 8,
+              left: spacing,
+            });
+          } else {
+            setPosition({
+              top: rect.bottom + 8,
+              right: rightPosition,
+            });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, buttonRef]);
 
   useEffect(() => {
     if (isOpen) {
+      const isMobileView = window.innerWidth < 640;
+      setIsMobile(isMobileView);
+
       if (buttonRef?.current) {
         const rect = buttonRef.current.getBoundingClientRect();
-        setPosition({
-          top: rect.bottom + 8,
-          right: window.innerWidth - rect.right,
-        });
+        const dropdownWidth = 384; // w-96 = 384px
+        const viewportWidth = window.innerWidth;
+        const spacing = 16; // 1rem padding
+
+        if (isMobileView) {
+          // On mobile, center the dropdown with spacing on both sides
+          setPosition({
+            top: rect.bottom + 8,
+            left: spacing,
+          });
+        } else {
+          // On desktop, position from right but ensure it doesn't overflow
+          const rightPosition = viewportWidth - rect.right;
+          const leftPosition = rect.right - dropdownWidth;
+
+          // Check if dropdown would overflow on the left
+          if (leftPosition < spacing) {
+            // If it would overflow, position from left with spacing
+            setPosition({
+              top: rect.bottom + 8,
+              left: spacing,
+            });
+          } else {
+            // Normal right-aligned positioning
+            setPosition({
+              top: rect.bottom + 8,
+              right: rightPosition,
+            });
+          }
+        }
       } else {
         // Fallback position if ref is not available
         setPosition({
@@ -96,17 +165,20 @@ export default function NotificationsDropdown({
 
       {/* Dropdown */}
       <Card
-        className="fixed w-96 max-w-[calc(100vw-2rem)] z-[70] shadow-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        className={`fixed z-[70] shadow-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 ${
+          isMobile ? 'left-4 right-4 w-auto' : 'w-96'
+        }`}
         style={{
           top: `${position.top}px`,
-          right: `${position.right}px`,
+          ...(position.right !== undefined && { right: `${position.right}px` }),
+          ...(position.left !== undefined && !isMobile && { left: `${position.left}px` }),
         }}
       >
         {/* Header */}
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+        <div className={`border-b border-gray-200 dark:border-gray-800 ${isMobile ? 'p-3' : 'p-4'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-lg">Notifications</h3>
+              <h3 className={`font-semibold ${isMobile ? 'text-base' : 'text-lg'}`}>Notifications</h3>
               {unreadCount > 0 && (
                 <Badge variant="default" className="bg-blue-500">
                   {unreadCount}
@@ -120,18 +192,18 @@ export default function NotificationsDropdown({
                   size="icon"
                   onClick={onRefresh}
                   disabled={isRefreshing}
-                  className="h-8 w-8"
+                  className={isMobile ? 'h-9 w-9' : 'h-8 w-8'}
                 >
                   <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </Button>
               )}
-              <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
+              <Button variant="ghost" size="icon" onClick={onClose} className={isMobile ? 'h-9 w-9' : 'h-8 w-8'}>
                 <X className="w-4 h-4" />
               </Button>
             </div>
           </div>
           {notifications.length > 0 && (
-            <div className="flex gap-2 mt-3">
+            <div className={`flex flex-wrap gap-2 ${isMobile ? 'mt-2' : 'mt-3'}`}>
               {unreadCount > 0 && (
                 <Button
                   variant="outline"
@@ -156,7 +228,7 @@ export default function NotificationsDropdown({
         </div>
 
         {/* Notifications List */}
-        <div className="max-h-[500px] overflow-y-auto">
+        <div className={`overflow-y-auto ${isMobile ? 'max-h-[60vh]' : 'max-h-[500px]'}`}>
           {notifications.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Bell className="w-12 h-12 mx-auto mb-3 opacity-30" />
@@ -168,9 +240,9 @@ export default function NotificationsDropdown({
               {notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${
+                  className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${
                     !notification.read ? 'bg-blue-50 dark:bg-blue-950/20' : ''
-                  }`}
+                  } ${isMobile ? 'p-3' : 'p-4'}`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5">{getIcon(notification.type)}</div>
