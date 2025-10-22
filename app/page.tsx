@@ -103,7 +103,8 @@ export default function Home() {
         {/* Header */}
         <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
           <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between gap-4">
+            {/* Desktop Layout - Single Row */}
+            <div className="hidden lg:flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-8 h-8 text-blue-500" />
                 <h1 className="text-2xl font-bold">Stock Price Watch</h1>
@@ -114,6 +115,33 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-2">
+                <Button variant="outline" size="icon" onClick={toggleTheme}>
+                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </Button>
+                <Button variant="outline" size="icon">
+                  <Bell className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" size="icon">
+                  <Settings className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Mobile Layout - Stacked */}
+            <div className="lg:hidden space-y-4">
+              {/* Row 1: Logo */}
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-8 h-8 text-blue-500" />
+                <h1 className="text-2xl font-bold">Stock Price Watch</h1>
+              </div>
+
+              {/* Row 2: Search & Trending Stocks */}
+              <div className="w-full">
+                <StockSearch onSelectStock={handleSelectStock} />
+              </div>
+
+              {/* Row 3: Menu Icons */}
+              <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
                 <Button variant="outline" size="icon" onClick={toggleTheme}>
                   {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </Button>
