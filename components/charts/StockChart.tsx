@@ -32,7 +32,6 @@ const timeFrames: TimeFrame[] = ['1D', '5D', '1M', '3M', '6M', '1Y', '5Y', 'MAX'
 export default function StockChart({ data, symbol, onTimeFrameChange }: StockChartProps) {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>('1M');
   const { chartSettings, theme } = useStockStore();
-  const [showIndicators, setShowIndicators] = useState(false);
 
   const indicators = data.length > 0 ? calculateTechnicalIndicators(data) : null;
 
@@ -209,15 +208,6 @@ export default function StockChart({ data, symbol, onTimeFrameChange }: StockCha
               {tf}
             </Button>
           ))}
-        </div>
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant={showIndicators ? 'default' : 'outline'}
-            onClick={() => setShowIndicators(!showIndicators)}
-          >
-            Indicators
-          </Button>
         </div>
       </div>
       <div className="flex-1 min-h-[400px]">
