@@ -1,97 +1,122 @@
-# Stock Price Watch
+# 📈 Stock Price Watch
 
-A modern, feature-rich web application for real-time stock price watch with advanced analytics, technical indicators, and customizable visualizations.
+<div align="center">
 
-![Stock Price Watch](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
+**Your Real-Time Financial Intelligence Platform**
 
-## Features
+*Professional-grade stock market analytics, powered by intelligent design*
+
+![Stock Price Watch](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8) ![License](https://img.shields.io/badge/license-MIT-green)
+
+[Features](#features) • [Getting Started](#getting-started) • [Tech Stack](#tech-stack) • [Documentation](#project-structure)
+
+</div>
+
+---
+
+## 🌟 What Makes This Special
+
+**Stock Price Watch** is not just another stock tracker—it's a comprehensive financial intelligence platform built for serious traders and investors. Combining real-time market data with advanced technical analysis, intelligent notifications, and a beautifully crafted user interface, this application delivers institutional-grade analytics in a modern, accessible package.
+
+### 🎯 Key Highlights
+
+- **💯 Zero Setup Required** - Works immediately with real-time data, no API keys needed for core features
+- **🔄 Intelligent Fallback System** - Dual-source architecture ensures you always get the latest news
+- **📊 Advanced Analytics** - Professional technical indicators (RSI, MACD, Bollinger Bands, Moving Averages)
+- **🎨 Adaptive Design** - Auto-theme follows your system preferences with seamless dark/light mode
+- **⚡ Lightning Fast** - Optimized search with instant autocomplete and smart caching
+- **📱 Truly Responsive** - Desktop-first design that adapts perfectly to mobile and tablet
+- **🔔 Smart Notifications** - AI-powered deduplication eliminates redundant alerts
+
+---
+
+## ✨ Features
 
 ### Core Functionality
-- **Real-time Stock Quotes** - Live price updates with detailed market information
-- **Interactive Charts** - Multiple timeframes (1D, 5D, 1M, 3M, 6M, 1Y, 5Y, MAX)
-- **Technical Indicators** - RSI, MACD, Bollinger Bands, EMA, SMA
-- **Volume Analysis** - Detailed volume charts with color-coded bars
-- **Dark/Light Mode** - Seamless theme switching with persistent preferences
+
+#### 📈 Real-Time Market Data
+- **Live Stock Quotes** - Instant price updates with comprehensive market information
+- **Interactive Charts** - 8 timeframes (1D, 5D, 1M, 3M, 6M, 1Y, 5Y, MAX) with smooth animations
+- **Smart Search** - Yahoo Finance autocomplete with fuzzy matching for stocks and ETFs
+- **Volume Analysis** - Color-coded volume bars with average volume comparison
+- **Trending Stocks** - Dedicated section showcasing top market movers
+
+#### 📊 Technical Analysis
+- **RSI (Relative Strength Index)** - Identify overbought/oversold conditions
+- **MACD** - Trend-following momentum indicator with signal line
+- **Bollinger Bands** - Volatility bands with upper/middle/lower thresholds
+- **Moving Averages** - SMA (20, 50, 200) and EMA (12, 26, 50)
+- **Custom Indicators** - Toggle individual indicators on/off
 
 ### Advanced Features
-- **Watchlist Management** - Add/remove stocks with real-time updates
-- **Stock Search** - Autocomplete search with trending stocks display
-- **Trending Stocks** - Separate scrollable section showing top market movers
-- **Market Heatmap** - Visual representation of sector performance
-- **News Integration** - Dual-source news with automatic fallback (Finnhub → Alpha Vantage)
-- **Smart Notifications** - Real-time alerts for news, price movements, and volume spikes
-- **Technical Analysis** - Comprehensive indicator calculations and visualizations
-- **Responsive Design** - Optimized for desktop, tablet, and mobile with sticky header
 
-### Customization
-- **Chart Settings** - Customize chart types, colors, and indicators
-- **Data Persistence** - Watchlist and preferences saved locally
-- **Multiple Layouts** - Flexible dashboard with tabbed interface
+#### 🔔 Intelligent Notification System
+- **Dual-Source News** - Automatic fallback from Finnhub to Alpha Vantage
+- **Price Alerts** - Triggers on significant movements (>3%)
+- **Volume Alerts** - Detects unusual trading activity (>1.5x average)
+- **52-Week Alerts** - Notifications near yearly highs/lows
+- **Smart Deduplication** - Advanced logic prevents redundant notifications
+- **Badge Counter** - Real-time unread notification count
 
-## Tech Stack
+#### 🎨 User Experience
+- **Auto Theme** - Follows system preference (light/dark/auto)
+- **Sticky Header** - Logo, search, and controls always accessible
+- **Responsive Layouts** - Optimized mobile/tablet/desktop experiences
+- **Watchlist Management** - Add/remove stocks with persistent storage
+- **Market Heatmap** - Visual sector performance overview
+- **Clear Cache** - One-click data refresh with confirmation
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Charts**: Chart.js, React-Chartjs-2, Lightweight Charts, Recharts
-- **State Management**: Zustand (with persistence)
-- **UI Components**: Custom components with shadcn/ui patterns
-- **Notifications**: React Hot Toast
-- **HTTP Client**: Axios
-- **Date Handling**: date-fns
-- **Icons**: Lucide React
-- **Testing**: TSX for TypeScript test execution
-- **Environment**: dotenv for configuration
+#### ⚙️ Customization
+- **Chart Settings** - Customize chart types, colors, and grid display
+- **Notification Preferences** - Control alert types and frequency
+- **Data Persistence** - Local storage for watchlist and preferences
+- **Tabbed Interface** - Organized chart/indicators views
 
-## 🔥 Real-Time Data
+---
 
-This application fetches **real, live market data** from multiple sources with automatic fallback:
-
-- ✅ **Yahoo Finance API** - Real-time stock prices, historical data, search (no API key required)
-- ✅ **Finnhub API** - Primary financial news source (optional, free tier available)
-- ✅ **Alpha Vantage API** - Fallback news source with sentiment analysis (optional, free tier available)
-
-### Works Out of the Box!
-Stock prices, charts, and market data work immediately without any setup. For financial news with automatic fallback, see [API_SETUP.md](./API_SETUP.md).
-
-### Intelligent News Fallback
-The app automatically uses Alpha Vantage as a fallback when Finnhub returns no results or encounters errors, ensuring you always get the latest market news.
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - npm or yarn
 
-### Installation
+### Quick Start
 
-1. Clone the repository:
+1. **Clone the repository**
 ```bash
 git clone <repository-url>
 cd stock-price
 ```
 
-2. Install dependencies:
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. (Optional) Configure API keys for news:
-```bash
-# Copy the example environment file
-cp .env.example .env.local
-
-# Edit .env.local and add your API keys:
-# NEXT_PUBLIC_FINNHUB_API_KEY=your_finnhub_key
-# NEXT_PUBLIC_ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key
-```
-
-4. Run the development server:
+3. **Run development server**
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. **Open in browser**
+Navigate to [http://localhost:3000](http://localhost:3000)
+
+**That's it!** The app works immediately with real-time stock data.
+
+### Optional: Enable News Features
+
+For financial news with automatic fallback:
+
+```bash
+# Copy environment template
+cp .env.example .env.local
+
+# Add your API keys (both optional, free tiers available)
+NEXT_PUBLIC_FINNHUB_API_KEY=your_finnhub_key
+NEXT_PUBLIC_ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key
+```
+
+See [API_SETUP.md](./API_SETUP.md) for detailed setup instructions.
 
 ### Build for Production
 
@@ -102,219 +127,388 @@ npm start
 
 ### Testing
 
-Run comprehensive API tests to verify news integration:
+Run comprehensive API tests:
 
 ```bash
-# Test both Finnhub and Alpha Vantage APIs
+# Test both news APIs
 npm run test:news
 
-# Test fallback mechanism specifically
+# Test fallback mechanism
 npm run test:fallback
 ```
 
-See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for detailed test documentation.
+See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for test documentation.
 
-## Project Structure
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: Next.js 14 (App Router with Server Components)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 3
+- **State Management**: Zustand (with persistence middleware)
+- **Charts**: Chart.js, React-Chartjs-2, Lightweight Charts, Recharts
+- **Icons**: Lucide React
+- **Notifications**: React Hot Toast
+
+### Backend & APIs
+- **Stock Data**: Yahoo Finance API (real-time quotes, historical data, search)
+- **News (Primary)**: Finnhub API (60 calls/min free tier)
+- **News (Fallback)**: Alpha Vantage API (25 calls/day free tier)
+- **HTTP Client**: Axios with timeout and retry logic
+
+### Development
+- **Testing**: TSX for TypeScript execution
+- **Environment**: dotenv for configuration
+- **Code Quality**: ESLint, TypeScript strict mode
+
+---
+
+## 🔥 Real-Time Data Sources
+
+### Stock Market Data
+✅ **Yahoo Finance API** - Powers all core functionality
+- Real-time stock prices and quotes
+- Historical OHLCV data (Open, High, Low, Close, Volume)
+- Autocomplete search with fuzzy matching
+- Trending stocks and market movers
+- **No API key required** - Works out of the box!
+
+### Financial News
+✅ **Dual-Source Architecture** with intelligent fallback
+
+**Primary: Finnhub API**
+- Company-specific news and analysis
+- General market news
+- Free tier: 60 API calls/minute
+- Get your key: https://finnhub.io/
+
+**Fallback: Alpha Vantage API**
+- News with sentiment analysis
+- Market trends and updates
+- Free tier: 25 API calls/day
+- Get your key: https://www.alphavantage.co/
+
+**Fallback Flow:**
+```
+Request News → Finnhub API → Success? ✅ Return news
+                          ↓
+                        Empty/Error? → Alpha Vantage API → ✅ Return news
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 stock-price/
-├── app/                    # Next.js app router
-│   ├── api/               # API routes
-│   │   ├── news/         # News API with fallback
-│   │   └── stock/        # Stock data endpoints
-│   ├── layout.tsx         # Root layout with metadata
-│   ├── page.tsx           # Main dashboard page
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── charts/           # Chart components
-│   │   ├── StockChart.tsx
-│   │   ├── VolumeChart.tsx
-│   │   └── TechnicalIndicators.tsx
-│   ├── dashboard/        # Dashboard components
-│   │   └── MarketHeatmap.tsx
-│   ├── notifications/    # Notification system
-│   │   └── NotificationsDropdown.tsx
-│   ├── settings/         # Settings components
-│   │   └── SettingsModal.tsx
-│   ├── stock/            # Stock-specific components
-│   │   ├── StockInfo.tsx
-│   │   ├── StockSearch.tsx
-│   │   ├── TrendingStocks.tsx
-│   │   └── Watchlist.tsx
-│   └── ui/               # Base UI components
+├── app/                          # Next.js App Router
+│   ├── api/                     # API Routes (Server-side)
+│   │   ├── news/               # Dual-source news API
+│   │   │   └── route.ts       # Finnhub + Alpha Vantage fallback
+│   │   └── stock/             # Yahoo Finance endpoints
+│   │       ├── quote/         # Real-time quotes
+│   │       ├── historical/    # Historical data
+│   │       ├── search/        # Autocomplete search
+│   │       └── trending/      # Trending stocks
+│   ├── layout.tsx              # Root layout with metadata
+│   ├── page.tsx                # Main dashboard
+│   └── globals.css             # Global styles & CSS variables
+│
+├── components/                  # React Components
+│   ├── charts/                 # Charting Components
+│   │   ├── StockChart.tsx     # Price chart with indicators
+│   │   ├── VolumeChart.tsx    # Volume analysis
+│   │   └── TechnicalIndicators.tsx  # Technical analysis display
+│   ├── dashboard/              # Dashboard Components
+│   │   └── MarketHeatmap.tsx  # Sector performance heatmap
+│   ├── notifications/          # Notification System
+│   │   └── NotificationsDropdown.tsx  # Smart notifications UI
+│   ├── settings/               # Settings & Preferences
+│   │   └── SettingsModal.tsx  # Settings modal with tabs
+│   ├── stock/                  # Stock-specific Components
+│   │   ├── StockInfo.tsx      # Stock details card
+│   │   ├── StockSearch.tsx    # Search with autocomplete
+│   │   ├── TrendingStocks.tsx # Trending stocks section
+│   │   └── Watchlist.tsx      # Watchlist management
+│   └── ui/                     # Base UI Components
 │       ├── button.tsx
 │       ├── card.tsx
 │       ├── input.tsx
 │       └── badge.tsx
-├── lib/                  # Utilities and services
-│   ├── services/        # API services
-│   │   ├── stockApi.ts
-│   │   ├── realStockApi.ts
-│   │   └── newsNotificationService.ts
-│   ├── stores/          # State management
-│   │   └── useStockStore.ts
-│   └── utils/           # Helper functions
-│       ├── calculations.ts
-│       └── cn.ts
-├── types/               # TypeScript definitions
-│   └── stock.ts
-├── test-news-api.ts     # Comprehensive news API tests
-├── test-fallback-scenario.ts  # Fallback mechanism tests
-├── NEWS_API_TEST_RESULTS.md   # Test documentation
-├── API_SETUP.md         # API configuration guide
-└── .env.example         # Environment variables template
+│
+├── lib/                         # Core Logic & Utilities
+│   ├── services/               # API Services
+│   │   ├── stockApi.ts        # Stock API abstraction
+│   │   ├── realStockApi.ts    # Yahoo Finance integration
+│   │   └── newsNotificationService.ts  # Notification logic
+│   ├── stores/                 # State Management
+│   │   └── useStockStore.ts   # Zustand store with persistence
+│   └── utils/                  # Helper Functions
+│       ├── calculations.ts    # Technical indicator calculations
+│       └── cn.ts              # Class name utility
+│
+├── types/                       # TypeScript Definitions
+│   └── stock.ts                # Stock data types
+│
+├── test-news-api.ts            # News API test suite (9 tests)
+├── test-fallback-scenario.ts   # Fallback mechanism tests
+├── NEWS_API_TEST_RESULTS.md    # Test documentation
+├── API_SETUP.md                # API setup guide
+└── .env.example                # Environment variables template
 ```
 
-## Features Deep Dive
+---
 
-### Technical Indicators
+## 🎨 UI/UX Highlights
 
-The application calculates and displays multiple technical indicators:
+### Adaptive Theme System
+- **Auto Mode** - Follows system preference with real-time sync
+- **Manual Override** - Choose light or dark mode
+- **Smooth Transitions** - Seamless theme switching
+- **Persistent** - Saves preference across sessions
 
-- **RSI (Relative Strength Index)**: Momentum indicator showing overbought/oversold conditions
-- **MACD (Moving Average Convergence Divergence)**: Trend-following momentum indicator
-- **Bollinger Bands**: Volatility indicator with upper/middle/lower bands
-- **Moving Averages**: SMA (20, 50, 200) and EMA (12, 26, 50)
+### Responsive Design
+- **Desktop** - Multi-column layout with sidebar navigation
+- **Tablet** - Optimized two-column layout
+- **Mobile** - Single column with touch-friendly controls
+- **Sticky Header** - Logo, search, and actions always accessible
+- **Flexible Charts** - Two-line button layout on mobile
 
-### Chart Features
+### Smart Notifications
+- **Deduplication Logic**:
+  - News: Same headline within 24 hours
+  - Price alerts: Same symbol/type within 1 hour
+  - System: Exact match prevention
+- **Badge Counter** - Real-time unread count
+- **Responsive Dropdown** - Smart positioning on mobile
+- **Refresh Button** - Manual refresh with loading state
 
-- Multiple timeframe selection
-- Interactive tooltips with detailed information
-- Customizable indicators overlay
-- Volume bars with color-coded direction
-- Smooth animations and responsive design
-- Grid and axis customization
+### Performance Optimizations
+- **Debounced Search** - 300ms delay prevents excessive API calls
+- **Memoized Calculations** - Technical indicators cached
+- **Code Splitting** - Dynamic imports for heavy components
+- **Lazy Loading** - Images and charts load on demand
+- **Local Storage** - Persistent data reduces API calls
 
-### UI/UX Improvements
+---
 
-#### Sticky Header
-- **Logo & Title**: Always visible when scrolling
-- **Search Bar**: Persistent access to stock search
-- **Action Buttons**: Quick access to theme toggle, notifications, and settings
-- **Responsive**: Separate layouts for desktop and mobile views
+## 🔧 Advanced Customization
 
-#### Trending Stocks Section
-- **Scrollable Display**: Positioned below sticky header
-- **Real-time Data**: Shows current price changes for popular stocks
-- **Color-coded**: Green for gains, red for losses
-- **Interactive**: Click any stock to view details
+### Adding Custom Indicators
 
-#### Smart Notifications
-- **News Updates**: Automatically fetched from dual sources
-- **Price Alerts**: Triggered on significant movements (>3%)
-- **Volume Alerts**: High volume detection (>1.5x average)
-- **52-Week Alerts**: Near high/low notifications
-- **Badge Counter**: Unread notification count
-- **Dropdown View**: Organized by type with timestamps
-
-### News API Integration
-
-The application uses a **dual-source news system** with intelligent fallback:
-
-1. **Primary Source - Finnhub**
-   - Financial news and company-specific updates
-   - Free tier: 60 API calls/minute
-   - Get your key at: https://finnhub.io/
-
-2. **Fallback Source - Alpha Vantage**
-   - News with sentiment analysis
-   - Free tier: 25 API calls/day
-   - Get your key at: https://www.alphavantage.co/
-
-**How the fallback works:**
-```
-Request News → Try Finnhub → Success? Return news
-                          ↓
-                        Empty/Error? → Try Alpha Vantage → Return news
+1. **Add calculation** in `lib/utils/calculations.ts`:
+```typescript
+export function calculateCustomIndicator(data: StockHistoricalData[]) {
+  // Your calculation logic
+  return results;
+}
 ```
 
-Both APIs are configured in `.env.local`. See [API_SETUP.md](./API_SETUP.md) for detailed setup instructions.
+2. **Update types** in `types/stock.ts`:
+```typescript
+export interface TechnicalIndicators {
+  // ... existing indicators
+  customIndicator?: number[];
+}
+```
 
-### Data Persistence
+3. **Add visualization** in `components/charts/TechnicalIndicators.tsx`
 
-The application uses Zustand with persistence middleware to save:
-- Watchlist items
-- Chart preferences
-- Theme selection
-- Alert configurations
+4. **Enable toggle** in chart settings modal
 
-Data is stored in browser's localStorage.
+### Customizing Theme
 
-## Customization
-
-### Adding New Indicators
-
-1. Add calculation function in \`lib/utils/calculations.ts\`
-2. Update \`TechnicalIndicator\` type in \`types/stock.ts\`
-3. Add visualization in \`components/charts/TechnicalIndicators.tsx\`
-4. Enable toggle in chart settings
-
-### Styling
-
-The app uses Tailwind CSS with custom design tokens defined in \`globals.css\`. Modify CSS variables to change the theme:
+Edit CSS variables in `app/globals.css`:
 
 ```css
 :root {
   --primary: 221.2 83.2% 53.3%;
   --background: 0 0% 100%;
-  /* ... more variables */
+  --foreground: 222.2 84% 4.9%;
+  /* ... customize colors */
+}
+
+.dark {
+  --primary: 217.2 91.2% 59.8%;
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  /* ... dark mode colors */
 }
 ```
 
-## Performance Optimization
+### API Rate Limiting
 
-- Lazy loading for heavy components
-- Memoization for expensive calculations
-- Debounced search queries
-- Efficient re-renders with proper React patterns
-- Code splitting with Next.js
+Customize API call frequencies in `app/page.tsx`:
 
-## Browser Support
+```typescript
+// News refresh interval (default: 5 minutes)
+const interval = setInterval(() => {
+  fetchNewsNotifications();
+}, 5 * 60 * 1000);
+```
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+---
 
-## Contributing
+## 📊 Features Deep Dive
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### Technical Indicators Explained
 
-## License
+#### RSI (Relative Strength Index)
+- **Range**: 0-100
+- **Overbought**: > 70 (potential sell signal)
+- **Oversold**: < 30 (potential buy signal)
+- **Use**: Identify momentum and reversal points
 
-MIT License - see LICENSE file for details
+#### MACD (Moving Average Convergence Divergence)
+- **Components**: MACD line, Signal line, Histogram
+- **Signal**: MACD crosses above signal = bullish
+- **Use**: Trend direction and momentum
 
-## Acknowledgments
+#### Bollinger Bands
+- **Bands**: Upper (mean + 2σ), Middle (20-day SMA), Lower (mean - 2σ)
+- **Signal**: Price touching bands = potential reversal
+- **Use**: Volatility and price extremes
 
-- Chart.js for powerful charting capabilities
-- Zustand for simple state management
-- shadcn/ui for design inspiration
-- Lucide for beautiful icons
+#### Moving Averages
+- **SMA**: Simple moving average (20, 50, 200 days)
+- **EMA**: Exponential moving average (12, 26, 50 days)
+- **Use**: Trend identification and support/resistance
 
-## Completed Features ✅
+### Chart Features
+- **8 Timeframes**: 1D (5-min), 5D (15-min), 1M-1Y (daily), 5Y (weekly), MAX (monthly)
+- **Interactive Tooltips**: Hover for detailed OHLCV data
+- **Zoom & Pan**: Mouse wheel zoom, click-drag pan
+- **Indicator Overlay**: Toggle indicators on main chart
+- **Grid Customization**: Show/hide grid lines
 
-- ✅ Real API integration (Yahoo Finance, Finnhub, Alpha Vantage)
-- ✅ Dual-source news with automatic fallback
-- ✅ Smart notification system
-- ✅ Responsive sticky header
-- ✅ Trending stocks section
-- ✅ Dark/light theme toggle
-- ✅ Comprehensive test suite
+---
 
-## Future Enhancements
+## ✅ Completed Features
 
-- [ ] Portfolio tracking with P&L
-- [ ] Advanced alerts system with custom thresholds
+- ✅ Real-time Yahoo Finance integration (no API key required)
+- ✅ Dual-source news with automatic fallback (Finnhub → Alpha Vantage)
+- ✅ Auto theme following system preference
+- ✅ Advanced search with Yahoo Finance autocomplete
+- ✅ Smart notification deduplication
+- ✅ Responsive sticky header (desktop & mobile layouts)
+- ✅ Trending stocks dedicated section
+- ✅ Clear cache functionality with confirmation
+- ✅ Enhanced error handling with User-Agent headers
+- ✅ Comprehensive test suite (9/9 tests passing)
+- ✅ Mobile-optimized chart button layout
+- ✅ Smart notification positioning on mobile
+- ✅ Volume and price alert system
+- ✅ 52-week high/low notifications
+- ✅ Technical indicator calculations and visualizations
+- ✅ Market sector heatmap
+- ✅ Watchlist with real-time updates
+- ✅ Data persistence (localStorage)
+
+---
+
+## 🚧 Roadmap & Future Enhancements
+
+### Short Term
+- [ ] Portfolio tracking with P&L calculations
+- [ ] Advanced alert system with custom thresholds
 - [ ] Stock comparison overlays
-- [ ] Export data to CSV/Excel
+- [ ] CSV/Excel data export
+- [ ] News caching and archival
+
+### Medium Term
 - [ ] Social sharing features
-- [ ] Mobile app version
-- [ ] Multi-language support
-- [ ] Advanced filtering and screening
-- [ ] AI-powered insights
-- [ ] News caching and deduplication
-- [ ] Historical news archive
+- [ ] Multi-language support (i18n)
+- [ ] Advanced filtering and screening tools
+- [ ] Historical news archive with search
+- [ ] Real-time WebSocket integration
 
-## Contact
+### Long Term
+- [ ] Mobile app (React Native)
+- [ ] AI-powered market insights
+- [ ] Predictive analytics with ML
+- [ ] Community features (social trading)
+- [ ] Advanced backtesting tools
 
-For questions or support, please open an issue on GitHub.
+---
+
+## 🌐 Browser Support
+
+| Browser | Version | Status |
+|---------|---------|--------|
+| Chrome  | Latest  | ✅ Fully Supported |
+| Firefox | Latest  | ✅ Fully Supported |
+| Safari  | Latest  | ✅ Fully Supported |
+| Edge    | Latest  | ✅ Fully Supported |
+
+**Note**: The app uses modern JavaScript features. IE11 is not supported.
+
+---
+
+## 📝 API Documentation
+
+### Yahoo Finance Endpoints
+- **Quote**: `/api/stock/quote?symbol=AAPL`
+- **Historical**: `/api/stock/historical?symbol=AAPL&range=1mo&interval=1d`
+- **Search**: `/api/stock/search?q=apple`
+- **Trending**: `/api/stock/trending`
+
+### News Endpoints
+- **General**: `/api/news`
+- **Stock-specific**: `/api/news?symbol=AAPL`
+
+All endpoints include automatic error handling, timeout protection, and response validation.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+Please ensure:
+- Code follows TypeScript best practices
+- All tests pass (`npm run build`)
+- Commit messages are descriptive
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **[Chart.js](https://www.chartjs.org/)** - Powerful, flexible charting library
+- **[Zustand](https://github.com/pmndrs/zustand)** - Simple, fast state management
+- **[shadcn/ui](https://ui.shadcn.com/)** - Beautiful component design patterns
+- **[Lucide](https://lucide.dev/)** - Elegant icon library
+- **[Yahoo Finance](https://finance.yahoo.com/)** - Reliable market data API
+- **[Finnhub](https://finnhub.io/)** - Comprehensive financial news
+- **[Alpha Vantage](https://www.alphavantage.co/)** - News with sentiment analysis
+
+---
+
+## 📧 Contact & Support
+
+- **Issues**: Open an issue on GitHub
+- **Discussions**: Use GitHub Discussions for questions
+- **Security**: Report security issues via GitHub Security Advisories
+
+---
+
+<div align="center">
+
+**Built with ❤️ by developers, for traders and investors**
+
+[⭐ Star this repo](https://github.com/your-username/stock-price) if you find it useful!
+
+</div>
