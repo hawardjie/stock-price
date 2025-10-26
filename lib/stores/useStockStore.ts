@@ -179,13 +179,62 @@ export const useStockStore = create<StockStore>()(
       notifications: [],
       addNotification: (notification) =>
         set((state) => {
+          // Helper function to normalize text
+          const normalizeText = (text: string): string => {
+            return text
+              .toLowerCase()
+              .replace(/[^\w\s]/g, '')
+              .replace(/\s+/g, ' ')
+              .trim();
+          };
+
+          // Helper function to check title similarity
+          const areTitlesSimilar = (title1: string, title2: string): boolean => {
+            const normalized1 = normalizeText(title1);
+            const normalized2 = normalizeText(title2);
+
+            if (normalized1 === normalized2) return true;
+
+            const words1 = normalized1.split(' ').filter(w => w.length > 3);
+            const words2 = normalized2.split(' ').filter(w => w.length > 3);
+
+            if (words1.length === 0 || words2.length === 0) return false;
+
+            const matchingWords = words1.filter(word => words2.includes(word)).length;
+            const similarity1 = matchingWords / words1.length;
+            const similarity2 = matchingWords / words2.length;
+
+            return similarity1 >= 0.8 || similarity2 >= 0.8;
+          };
+
           // Enhanced deduplication logic
           const exists = state.notifications.some((n) => {
-            // For news notifications, check if same headline within last 24 hours
+            // For news notifications, check URL, title similarity, and content similarity
             if (notification.type === 'news' && n.type === 'news') {
+              // Check if within 24 hours (don't deduplicate old news)
               const timeDiff = Date.now() - n.timestamp;
-              const sameHeadline = n.title === notification.title;
-              return sameHeadline && timeDiff < 24 * 60 * 60 * 1000;
+              if (timeDiff >= 24 * 60 * 60 * 1000) return false;
+
+              // If both have URLs, compare URLs for exact match
+              if (notification.url && n.url && n.url === notification.url) {
+                return true;
+              }
+
+              // Check title similarity
+              if (areTitlesSimilar(n.title, notification.title)) {
+                return true;
+              }
+
+              // Check message/summary similarity
+              if (notification.message && n.message) {
+                const normalizedMsg1 = normalizeText(notification.message.substring(0, 200));
+                const normalizedMsg2 = normalizeText(n.message.substring(0, 200));
+                if (normalizedMsg1 === normalizedMsg2) {
+                  return true;
+                }
+              }
+
+              return false;
             }
 
             // For price/volume alerts, check if same symbol and type within last hour

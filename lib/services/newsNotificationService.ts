@@ -191,6 +191,128 @@ class NewsNotificationService {
   }
 
   /**
+   * Normalize text for comparison (remove punctuation, extra spaces, convert to lowercase)
+   */
+  private normalizeText(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, '') // Remove punctuation
+      .replace(/\s+/g, ' ')     // Normalize spaces
+      .trim();
+  }
+
+  /**
+   * Check if two titles are similar enough to be considered duplicates
+   */
+  private areTitlesSimilar(title1: string, title2: string): boolean {
+    const normalized1 = this.normalizeText(title1);
+    const normalized2 = this.normalizeText(title2);
+
+    // Exact match after normalization
+    if (normalized1 === normalized2) {
+      return true;
+    }
+
+    // Check if one title contains most of the other (at least 80% overlap)
+    const words1 = normalized1.split(' ').filter(w => w.length > 3); // Ignore short words
+    const words2 = normalized2.split(' ').filter(w => w.length > 3);
+
+    if (words1.length === 0 || words2.length === 0) {
+      return false;
+    }
+
+    // Count matching words
+    const matchingWords = words1.filter(word => words2.includes(word)).length;
+    const similarity1 = matchingWords / words1.length;
+    const similarity2 = matchingWords / words2.length;
+
+    // If either direction has 80% similarity, consider them similar
+    return similarity1 >= 0.8 || similarity2 >= 0.8;
+  }
+
+  /**
+   * Check if two news notifications are duplicates based on content similarity
+   */
+  private areNewsDuplicates(notif1: Omit<Notification, 'id'>, notif2: Omit<Notification, 'id'>): boolean {
+    // Both must be news type
+    if (notif1.type !== 'news' || notif2.type !== 'news') {
+      return false;
+    }
+
+    // Check URL first - if same URL, definitely duplicate
+    if (notif1.url && notif2.url && notif1.url === notif2.url) {
+      return true;
+    }
+
+    // Check title similarity
+    if (this.areTitlesSimilar(notif1.title, notif2.title)) {
+      return true;
+    }
+
+    // Check message/summary similarity
+    if (notif1.message && notif2.message) {
+      const normalizedMsg1 = this.normalizeText(notif1.message.substring(0, 200)); // First 200 chars
+      const normalizedMsg2 = this.normalizeText(notif2.message.substring(0, 200));
+
+      if (normalizedMsg1 === normalizedMsg2) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Deduplicate notifications based on URL, title similarity, and content for news
+   */
+  private deduplicateNotifications(notifications: Omit<Notification, 'id'>[]): Omit<Notification, 'id'>[] {
+    const uniqueNotifications: Omit<Notification, 'id'>[] = [];
+
+    for (const notification of notifications) {
+      let isDuplicate = false;
+
+      // For news notifications, use comprehensive similarity check
+      if (notification.type === 'news') {
+        isDuplicate = uniqueNotifications.some(existing =>
+          this.areNewsDuplicates(notification, existing)
+        );
+
+        // If it's a duplicate but current has a symbol and existing doesn't, replace it
+        if (isDuplicate && notification.symbol) {
+          const duplicateIndex = uniqueNotifications.findIndex(existing =>
+            this.areNewsDuplicates(notification, existing)
+          );
+          if (duplicateIndex !== -1 && !uniqueNotifications[duplicateIndex].symbol) {
+            uniqueNotifications[duplicateIndex] = notification;
+          }
+        }
+      }
+      // For price/watchlist alerts, use exact matching
+      else if (notification.type === 'price_alert' || notification.type === 'watchlist') {
+        isDuplicate = uniqueNotifications.some(existing =>
+          existing.type === notification.type &&
+          existing.symbol === notification.symbol &&
+          existing.title === notification.title
+        );
+      }
+      // For system notifications, use exact title match
+      else {
+        isDuplicate = uniqueNotifications.some(existing =>
+          existing.type === notification.type &&
+          existing.title === notification.title
+        );
+      }
+
+      // Add if not duplicate
+      if (!isDuplicate) {
+        uniqueNotifications.push(notification);
+      }
+    }
+
+    return uniqueNotifications;
+  }
+
+  /**
    * Fetch all notifications (news + price alerts)
    */
   async fetchAllNotifications(watchlist: Array<{ symbol: string; name: string }>): Promise<Omit<Notification, 'id'>[]> {
@@ -207,9 +329,14 @@ class NewsNotificationService {
         watchlist.length > 0 ? this.checkPriceAlerts(watchlist) : Promise.resolve([]),
       ]);
 
-      // Combine and sort by timestamp (newest first)
+      // Combine all notifications
       const allNotifications = [...priceAlerts, ...stockNews, ...marketNews];
-      return allNotifications.sort((a, b) => b.timestamp - a.timestamp);
+
+      // Deduplicate notifications (remove duplicates within the same fetch)
+      const uniqueNotifications = this.deduplicateNotifications(allNotifications);
+
+      // Sort by timestamp (newest first)
+      return uniqueNotifications.sort((a, b) => b.timestamp - a.timestamp);
     } catch (error) {
       console.error('Error fetching all notifications:', error);
       return [];

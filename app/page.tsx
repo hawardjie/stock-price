@@ -13,7 +13,6 @@ import Watchlist from '@/components/stock/Watchlist';
 import TechnicalIndicators from '@/components/charts/TechnicalIndicators';
 import MarketHeatmap from '@/components/dashboard/MarketHeatmap';
 import NotificationsDropdown from '@/components/notifications/NotificationsDropdown';
-import SettingsModal from '@/components/settings/SettingsModal';
 import { newsNotificationService } from '@/lib/services/newsNotificationService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,14 +22,13 @@ import {
   Moon,
   Sun,
   Star,
-  Settings,
   Bell,
   TrendingUp,
   BarChart3,
   Activity,
   Laptop,
 } from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const {
@@ -51,13 +49,26 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'chart' | 'indicators'>('chart');
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const notificationButtonRefMobile = useRef<HTMLButtonElement>(null);
   const [fetchingNews, setFetchingNews] = useState(false);
   const [appliedTheme, setAppliedTheme] = useState<'light' | 'dark'>('dark');
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const notificationCount = notifications.filter(n => !n.read).length;
+
+  // Track mobile view for notification dropdown positioning
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 1024); // lg breakpoint
+    };
+
+    // Set initial value
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Handle auto theme based on system preference
   useEffect(() => {
@@ -174,7 +185,6 @@ export default function Home() {
 
   return (
     <div className={appliedTheme}>
-      <Toaster position="top-right" />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
         {/* Header */}
         <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm overflow-visible">
@@ -214,26 +224,7 @@ export default function Home() {
                       {notificationCount}
                     </Badge>
                   )}
-                  <NotificationsDropdown
-                    isOpen={showNotifications}
-                    onClose={() => setShowNotifications(false)}
-                    buttonRef={notificationButtonRef}
-                    notifications={notifications}
-                    onMarkAsRead={markNotificationAsRead}
-                    onMarkAllAsRead={markAllNotificationsAsRead}
-                    onDelete={deleteNotification}
-                    onClearAll={clearAllNotifications}
-                    onRefresh={fetchNewsNotifications}
-                    isRefreshing={fetchingNews}
-                  />
                 </div>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setShowSettings(true)}
-                >
-                  <Settings className="w-5 h-5" />
-                </Button>
                 </div>
               </div>
 
@@ -278,26 +269,7 @@ export default function Home() {
                       {notificationCount}
                     </Badge>
                   )}
-                  <NotificationsDropdown
-                    isOpen={showNotifications}
-                    onClose={() => setShowNotifications(false)}
-                    buttonRef={notificationButtonRefMobile}
-                    notifications={notifications}
-                    onMarkAsRead={markNotificationAsRead}
-                    onMarkAllAsRead={markAllNotificationsAsRead}
-                    onDelete={deleteNotification}
-                    onClearAll={clearAllNotifications}
-                    onRefresh={fetchNewsNotifications}
-                    isRefreshing={fetchingNews}
-                  />
                 </div>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setShowSettings(true)}
-                >
-                  <Settings className="w-5 h-5" />
-                </Button>
                 </div>
               </div>
 
@@ -308,6 +280,20 @@ export default function Home() {
             </div>
           </div>
         </header>
+
+        {/* Single Notifications Dropdown - Rendered once outside layouts */}
+        <NotificationsDropdown
+          isOpen={showNotifications}
+          onClose={() => setShowNotifications(false)}
+          buttonRef={isMobileView ? notificationButtonRefMobile : notificationButtonRef}
+          notifications={notifications}
+          onMarkAsRead={markNotificationAsRead}
+          onMarkAllAsRead={markAllNotificationsAsRead}
+          onDelete={deleteNotification}
+          onClearAll={clearAllNotifications}
+          onRefresh={fetchNewsNotifications}
+          isRefreshing={fetchingNews}
+        />
 
         {/* Trending Stocks - Not Sticky */}
         <TrendingStocks onSelectStock={handleSelectStock} />
@@ -415,9 +401,6 @@ export default function Home() {
             <MarketHeatmap />
           </div>
         </main>
-
-        {/* Settings Modal */}
-        <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
       </div>
     </div>
   );
