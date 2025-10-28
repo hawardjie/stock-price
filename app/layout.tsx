@@ -5,6 +5,9 @@ import { Toaster } from 'react-hot-toast';
 export const metadata: Metadata = {
   title: "Stock Price Watch - Real-time Market Analytics",
   description: "Modern real-time stock price watch with advanced analytics, technical indicators, and customizable visualizations",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({

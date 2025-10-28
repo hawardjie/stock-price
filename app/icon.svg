@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- TrendingUp icon matching lucide-react design -->
+  <!-- Main trending line -->
+  <polyline
+    points="8,48 20,36 32,40 44,20 56,8"
+    fill="none"
+    stroke="#3B82F6"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Arrow head -->
+  <polyline
+    points="44,8 56,8 56,20"
+    fill="none"
+    stroke="#3B82F6"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
