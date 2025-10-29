@@ -1,2 +1,0 @@
-# stock-price
-Stock price 

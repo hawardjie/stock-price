@@ -1,4 +1,4 @@
-# 📈 Stock Price Watch
+# Stock Price Watch
 
 <div align="center">
 
@@ -14,34 +14,34 @@
 
 ---
 
-## 🌟 What Makes This Special
+## What Makes This Special
 
 **Stock Price Watch** is not just another stock tracker—it's a comprehensive financial intelligence platform built for serious traders and investors. Combining real-time market data with advanced technical analysis, intelligent notifications, and a beautifully crafted user interface, this application delivers institutional-grade analytics in a modern, accessible package.
 
-### 🎯 Key Highlights
+### Key Highlights
 
-- **💯 Zero Setup Required** - Works immediately with real-time data, no API keys needed for core features
-- **🔄 Intelligent Fallback System** - Dual-source architecture ensures you always get the latest news
-- **📊 Advanced Analytics** - Professional technical indicators (RSI, MACD, Bollinger Bands, Moving Averages)
-- **🎨 Adaptive Design** - Auto-theme follows your system preferences with seamless dark/light mode
-- **⚡ Lightning Fast** - Optimized search with instant autocomplete and smart caching
-- **📱 Truly Responsive** - Desktop-first design that adapts perfectly to mobile and tablet
-- **🔔 Smart Notifications** - AI-powered deduplication eliminates redundant alerts
+- **Zero Setup Required** - Works immediately with real-time data, no API keys needed for core features
+- **Intelligent Fallback System** - Dual-source architecture ensures you always get the latest news
+- **Advanced Analytics** - Professional technical indicators (RSI, MACD, Bollinger Bands, Moving Averages)
+- **Adaptive Design** - Auto-theme follows your system preferences with seamless dark/light mode
+- **Lightning Fast** - Optimized search with instant autocomplete and smart caching
+- **Truly Responsive** - Desktop-first design that adapts perfectly to mobile and tablet
+- **Smart Notifications** - AI-powered deduplication eliminates redundant alerts
 
 ---
 
-## ✨ Features
+## Features
 
 ### Core Functionality
 
-#### 📈 Real-Time Market Data
+#### Real-Time Market Data
 - **Live Stock Quotes** - Instant price updates with comprehensive market information
 - **Interactive Charts** - 8 timeframes (1D, 5D, 1M, 3M, 6M, 1Y, 5Y, MAX) with smooth animations
 - **Smart Search** - Yahoo Finance autocomplete with fuzzy matching for stocks and ETFs
 - **Volume Analysis** - Color-coded volume bars with average volume comparison
 - **Trending Stocks** - Dedicated section showcasing top market movers
 
-#### 📊 Technical Analysis
+#### Technical Analysis
 - **RSI (Relative Strength Index)** - Identify overbought/oversold conditions
 - **MACD** - Trend-following momentum indicator with signal line
 - **Bollinger Bands** - Volatility bands with upper/middle/lower thresholds
@@ -50,7 +50,7 @@
 
 ### Advanced Features
 
-#### 🔔 Intelligent Notification System
+#### Intelligent Notification System
 - **Dual-Source News** - Automatic fallback from Finnhub to Alpha Vantage
 - **Price Alerts** - Triggers on significant movements (>3%)
 - **Volume Alerts** - Detects unusual trading activity (>1.5x average)
@@ -58,7 +58,7 @@
 - **Smart Deduplication** - Advanced logic prevents redundant notifications
 - **Badge Counter** - Real-time unread notification count
 
-#### 🎨 User Experience
+#### User Experience
 - **Auto Theme** - Follows system preference (light/dark/auto)
 - **Sticky Header** - Logo, search, and controls always accessible
 - **Responsive Layouts** - Optimized mobile/tablet/desktop experiences
@@ -66,7 +66,7 @@
 - **Market Heatmap** - Visual sector performance overview
 - **Clear Cache** - One-click data refresh with confirmation
 
-#### ⚙️ Customization
+#### Customization
 - **Chart Settings** - Customize chart types, colors, and grid display
 - **Notification Preferences** - Control alert types and frequency
 - **Data Persistence** - Local storage for watchlist and preferences
@@ -74,7 +74,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -141,7 +141,7 @@ See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for test documentatio
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: Next.js 14 (App Router with Server Components)
@@ -165,10 +165,10 @@ See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for test documentatio
 
 ---
 
-## 🔥 Real-Time Data Sources
+## Real-Time Data Sources
 
 ### Stock Market Data
-✅ **Yahoo Finance API** - Powers all core functionality
+**Yahoo Finance API** - Powers all core functionality
 - Real-time stock prices and quotes
 - Historical OHLCV data (Open, High, Low, Close, Volume)
 - Autocomplete search with fuzzy matching
@@ -176,7 +176,7 @@ See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for test documentatio
 - **No API key required** - Works out of the box!
 
 ### Financial News
-✅ **Dual-Source Architecture** with intelligent fallback
+**Dual-Source Architecture** with intelligent fallback
 
 **Primary: Finnhub API**
 - Company-specific news and analysis
@@ -192,9 +192,9 @@ See [NEWS_API_TEST_RESULTS.md](./NEWS_API_TEST_RESULTS.md) for test documentatio
 
 **Fallback Flow:**
 ```
-Request News → Finnhub API → Success? ✅ Return news
+Request News → Finnhub API → Success? Return news
                           ↓
-                        Empty/Error? → Alpha Vantage API → ✅ Return news
+                        Empty/Error? → Alpha Vantage API → Return news
 ```
 
 ---
@@ -261,7 +261,7 @@ stock-price/
 
 ---
 
-## 🎨 UI/UX Highlights
+## UI/UX Highlights
 
 ### Adaptive Theme System
 - **Auto Mode** - Follows system preference with real-time sync
@@ -294,7 +294,7 @@ stock-price/
 
 ---
 
-## 🔧 Advanced Customization
+## Advanced Customization
 
 ### Adding Custom Indicators
 
@@ -351,7 +351,7 @@ const interval = setInterval(() => {
 
 ---
 
-## 📊 Features Deep Dive
+## Features Deep Dive
 
 ### Technical Indicators Explained
 
@@ -385,30 +385,30 @@ const interval = setInterval(() => {
 
 ---
 
-## ✅ Completed Features
+## Completed Features
 
-- ✅ Real-time Yahoo Finance integration (no API key required)
-- ✅ Dual-source news with automatic fallback (Finnhub → Alpha Vantage)
-- ✅ Auto theme following system preference
-- ✅ Advanced search with Yahoo Finance autocomplete
-- ✅ Smart notification deduplication
-- ✅ Responsive sticky header (desktop & mobile layouts)
-- ✅ Trending stocks dedicated section
-- ✅ Clear cache functionality with confirmation
-- ✅ Enhanced error handling with User-Agent headers
-- ✅ Comprehensive test suite (9/9 tests passing)
-- ✅ Mobile-optimized chart button layout
-- ✅ Smart notification positioning on mobile
-- ✅ Volume and price alert system
-- ✅ 52-week high/low notifications
-- ✅ Technical indicator calculations and visualizations
-- ✅ Market sector heatmap
-- ✅ Watchlist with real-time updates
-- ✅ Data persistence (localStorage)
+- Real-time Yahoo Finance integration (no API key required)
+- Dual-source news with automatic fallback (Finnhub → Alpha Vantage)
+- Auto theme following system preference
+- Advanced search with Yahoo Finance autocomplete
+- Smart notification deduplication
+- Responsive sticky header (desktop & mobile layouts)
+- Trending stocks dedicated section
+- Clear cache functionality with confirmation
+- Enhanced error handling with User-Agent headers
+- Comprehensive test suite (9/9 tests passing)
+- Mobile-optimized chart button layout
+- Smart notification positioning on mobile
+- Volume and price alert system
+- 52-week high/low notifications
+- Technical indicator calculations and visualizations
+- Market sector heatmap
+- Watchlist with real-time updates
+- Data persistence (localStorage)
 
 ---
 
-## 🚧 Roadmap & Future Enhancements
+## Roadmap & Future Enhancements
 
 ### Short Term
 - [ ] Portfolio tracking with P&L calculations
@@ -433,20 +433,20 @@ const interval = setInterval(() => {
 
 ---
 
-## 🌐 Browser Support
+## Browser Support
 
 | Browser | Version | Status |
 |---------|---------|--------|
-| Chrome  | Latest  | ✅ Fully Supported |
-| Firefox | Latest  | ✅ Fully Supported |
-| Safari  | Latest  | ✅ Fully Supported |
-| Edge    | Latest  | ✅ Fully Supported |
+| Chrome  | Latest  | Fully Supported |
+| Firefox | Latest  | Fully Supported |
+| Safari  | Latest  | Fully Supported |
+| Edge    | Latest  | Fully Supported |
 
 **Note**: The app uses modern JavaScript features. IE11 is not supported.
 
 ---
 
-## 📝 API Documentation
+## API Documentation
 
 ### Yahoo Finance Endpoints
 - **Quote**: `/api/stock/quote?symbol=AAPL`
@@ -462,7 +462,7 @@ All endpoints include automatic error handling, timeout protection, and response
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Here's how:
 
@@ -479,13 +479,13 @@ Please ensure:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **[Chart.js](https://www.chartjs.org/)** - Powerful, flexible charting library
 - **[Zustand](https://github.com/pmndrs/zustand)** - Simple, fast state management
@@ -497,7 +497,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 📧 Contact & Support
+## Contact & Support
 
 - **Issues**: Open an issue on GitHub
 - **Discussions**: Use GitHub Discussions for questions
@@ -507,7 +507,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-**Built with ❤️ by developers, for traders and investors**
+**Built by developers, for traders and investors**
 
 [⭐ Star this repo](https://github.com/your-username/stock-price) if you find it useful!
 
